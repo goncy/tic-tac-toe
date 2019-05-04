@@ -15,15 +15,14 @@ const App: React.FC = () => {
   function handleSlotClick(player: string, slot: number) {
     used.set(slot, player);
 
+    const winnerComp = WINNER_COMPS.find(
+      comp => comp.filter(slot => used.get(slot) !== player).length === 0
+    );
+
     setPlayer(player === 'X' ? 'O' : 'X');
 
-    setWinnerComp(
-      used.size === SLOTS.length
-        ? []
-        : WINNER_COMPS.find(
-            comp => comp.filter(slot => used.get(slot) !== player).length === 0
-          )
-    );
+    if (winnerComp) return setWinnerComp(winnerComp);
+    if (used.size === SLOTS.length) return setWinnerComp([]);
   }
 
   function handleReset() {
